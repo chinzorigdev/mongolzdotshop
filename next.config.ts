@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    domains: ["kom-uploads.s3.amazonaws.com", "d2sucgbhjy7j1n.cloudfront.net"],
+  },
 };
 
 export default nextConfig;
