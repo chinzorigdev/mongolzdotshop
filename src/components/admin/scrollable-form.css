@@ -1,0 +1,75 @@
+/* 
+* Scrollable form styles
+* Adds custom scrollbar styling and scroll indicators
+*/
+
+.scrollable-form-container {
+  max-height: 80vh;
+  overflow-y: auto;
+  padding-right: 16px;
+  position: relative;
+  scroll-behavior: smooth;
+  border-radius: 8px;
+  padding: 4px 16px 4px 4px;
+  margin-bottom: 20px;
+}
+
+/* Custom scrollbar */
+.scrollable-form-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollable-form-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.scrollable-form-container::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border-radius: 4px;
+}
+
+.scrollable-form-container::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
+}
+
+/* Scroll shadow indicators */
+.scrollable-form-container::before,
+.scrollable-form-container::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 30px;
+  pointer-events: none;
+  z-index: 10;
+  transition: opacity 0.3s ease;
+}
+
+.scrollable-form-container::before {
+  top: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.9),
+    rgba(255, 255, 255, 0)
+  );
+  opacity: 0;
+}
+
+.scrollable-form-container::after {
+  bottom: 0;
+  background: linear-gradient(
+    to top,
+    rgba(255, 255, 255, 0.9),
+    rgba(255, 255, 255, 0)
+  );
+  opacity: 0;
+}
+
+.scrollable-form-container.scrolled-top::before {
+  opacity: 1;
+}
+
+.scrollable-form-container.scrolled-bottom::after {
+  opacity: 1;
+}

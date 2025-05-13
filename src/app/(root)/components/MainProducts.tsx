@@ -1,6 +1,73 @@
+"use client";
+import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+
+interface Product {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  price_on_sale: number | null;
+  image: string;
+  sizes: string[];
+}
 
 export default function MainProducts() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedSizes, setSelectedSizes] = useState<{ [key: string]: string }>(
+    {}
+  );
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch("/api/products");
+        if (!response.ok) {
+          throw new Error("Failed to fetch products");
+        }
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // Function to handle size selection
+  const handleSizeSelect = (productId: string, size: string) => {
+    setSelectedSizes({
+      ...selectedSizes,
+      [productId]: size,
+    });
+  };
+
+  // Function to add to cart
+  const addToCart = (product: Product) => {
+    const size = selectedSizes[product.id] || product.sizes[0];
+    // Here you would implement your cart functionality
+    console.log("Adding to cart:", { ...product, size });
+
+    // Example: Open cart drawer
+    const cartDrawer = document.querySelector('[data-drawer="cart"]');
+    if (cartDrawer) {
+      cartDrawer.classList.add("open");
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-20">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-yellow-500"></div>
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="max-w-6xl mx-auto py-6 px-4 sm:py-8 sm:px-6 lg:px-8">
@@ -89,6 +156,7 @@ export default function MainProducts() {
                           data-action="product_option_choose"
                           data-action-option-idx="1"
                           className="block px-4 py-2 hover:bg-gray-100"
+                          onClick={() => handleSizeSelect("17624", "XL")}
                         >
                           XL
                         </a>
@@ -99,6 +167,7 @@ export default function MainProducts() {
                           data-action="product_option_choose"
                           data-action-option-idx="2"
                           className="block px-4 py-2 hover:bg-gray-100"
+                          onClick={() => handleSizeSelect("17624", "2XL")}
                         >
                           2XL
                         </a>
@@ -109,6 +178,7 @@ export default function MainProducts() {
                           data-action="product_option_choose"
                           data-action-option-idx="3"
                           className="block px-4 py-2 hover:bg-gray-100"
+                          onClick={() => handleSizeSelect("17624", "3XL")}
                         >
                           3XL
                         </a>
@@ -119,6 +189,7 @@ export default function MainProducts() {
                           data-action="product_option_choose"
                           data-action-option-idx="4"
                           className="block px-4 py-2 hover:bg-gray-100"
+                          onClick={() => handleSizeSelect("17624", "5XL")}
                         >
                           5XL
                         </a>
@@ -138,9 +209,20 @@ export default function MainProducts() {
                     <p className="text-yellow-600 font-bold tugrik">150’000</p>
                     <a
                       data-drawer-open="cart"
-                      data-cart-add='{"id": 17624, "image": "https://kom-uploads.s3.amazonaws.com/store-1599/product-17624--1733167005-w400.jpg", "price": 150000, "price_on_sale": null, "title": "The MongolZ - Pro Jersey\u00a02025"}'
                       href="#"
                       className="flex gap-2 items-center justify-center text-gray-500 hover:text-yellow-600"
+                      onClick={() =>
+                        addToCart({
+                          id: "17624",
+                          title: "The MongolZ - Pro Jersey 2025",
+                          description: "Official Jersey.",
+                          price: 150000,
+                          price_on_sale: null,
+                          image:
+                            "https://kom-uploads.s3.amazonaws.com/store-1599/product-17624--1733167005-w400.jpg",
+                          sizes: ["XL", "2XL", "3XL", "5XL"],
+                        })
+                      }
                     >
                       <svg
                         className="h-4 w-4"
@@ -236,6 +318,7 @@ export default function MainProducts() {
                           data-action="product_option_choose"
                           data-action-option-idx="1"
                           className="block px-4 py-2 hover:bg-gray-100"
+                          onClick={() => handleSizeSelect("63535", "2XS")}
                         >
                           2XS
                         </a>
@@ -246,6 +329,7 @@ export default function MainProducts() {
                           data-action="product_option_choose"
                           data-action-option-idx="2"
                           className="block px-4 py-2 hover:bg-gray-100"
+                          onClick={() => handleSizeSelect("63535", "3XS")}
                         >
                           3XS
                         </a>
@@ -256,6 +340,7 @@ export default function MainProducts() {
                           data-action="product_option_choose"
                           data-action-option-idx="3"
                           className="block px-4 py-2 hover:bg-gray-100"
+                          onClick={() => handleSizeSelect("63535", "4XS")}
                         >
                           4XS
                         </a>
@@ -266,6 +351,7 @@ export default function MainProducts() {
                           data-action="product_option_choose"
                           data-action-option-idx="4"
                           className="block px-4 py-2 hover:bg-gray-100"
+                          onClick={() => handleSizeSelect("63535", "5XS")}
                         >
                           5XS
                         </a>
@@ -282,9 +368,21 @@ export default function MainProducts() {
                     <p className="text-pink-600 font-bold tugrik">80’000</p>
                     <a
                       data-drawer-open="cart"
-                      data-cart-add='{"id": 63535, "image": "https://kom-uploads.s3.amazonaws.com/store-1599/product-63535--1736944491-w400.jpg", "price": 80000, "price_on_sale": null, "title": "The MongolZ - Kids Jersey (No Sponsor Logos)"}'
                       href="#"
                       className="flex gap-2 items-center justify-center text-gray-500 hover:text-pink-600"
+                      onClick={() =>
+                        addToCart({
+                          id: "63535",
+                          title: "The MongolZ - Kids Jersey (No Sponsor Logos)",
+                          description:
+                            "Хүүхдэд зориулсан жижиг размерын өмсгөл.",
+                          price: 80000,
+                          price_on_sale: null,
+                          image:
+                            "https://kom-uploads.s3.amazonaws.com/store-1599/product-63535--1736944491-w400.jpg",
+                          sizes: ["2XS", "3XS", "4XS", "5XS"],
+                        })
+                      }
                     >
                       <svg
                         className="h-4 w-4"
